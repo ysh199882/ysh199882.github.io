@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  
+  <title>按钮权限控制 | yongbi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="按钮权限有两种，一种是  不同role角色可见的按钮 ，一种是根据路由跳转按钮 路由跳转按钮的设计思路1.首先平铺后端接口menu，获取到路由keys数组2.判断keys是否包含该路由，并将IsShow状态存储在redux中 1234store.dispatch(&amp;#123;   type: &amp;#x27;set-buttonIsShow&amp;#x27;,   payload: &amp;#123; butto">
+<meta property="og:type" content="article">
+<meta property="og:title" content="按钮权限控制">
+<meta property="og:url" content="https://www.yongbi.co/2022/05/15/%E6%8C%89%E9%92%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/index.html">
+<meta property="og:site_name" content="yongbi">
+<meta property="og:description" content="按钮权限有两种，一种是  不同role角色可见的按钮 ，一种是根据路由跳转按钮 路由跳转按钮的设计思路1.首先平铺后端接口menu，获取到路由keys数组2.判断keys是否包含该路由，并将IsShow状态存储在redux中 1234store.dispatch(&amp;#123;   type: &amp;#x27;set-buttonIsShow&amp;#x27;,   payload: &amp;#123; butto">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-15T11:11:39.000Z">
+<meta property="article:modified_time" content="2022-05-15T11:22:34.844Z">
+<meta property="article:author" content="yongbi">
+<meta property="article:tag" content="业务需求">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/typing.css">
+
+  
+<link rel="stylesheet" href="/css/donate.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1/css/fork-awesome.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="about-按钮权限控制" class="h-entry article article-type-about" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <header id="header" class="header">
+  <nav class="mobile-nav">
+    <h1 class="nickname">Yongbi</h1>
+    <ul class="mobile-nav-menu">
+      <label for="mobile-menu-toggle"><a id="menu-button">&#9776; Menu</a></label>
+      <input type="checkbox" id="mobile-menu-toggle"/>
+      <ul class="mobile-nav-link">
+        
+        <a href="/">主页</a>
+        
+        <a href="/archives">Archives</a>
+        
+        <a href="/about">关于</a>
+        
+      </ul>
+    </ul>
+  </nav>
+	
+		<nav id="main-nav" class="main-nav nav-left">
+	
+	
+	  <a class="main-nav-link" href="/">主页</a>
+	
+	  <a class="main-nav-link" href="/archives">Archives</a>
+	
+	  <a class="main-nav-link" href="/about">关于</a>
+	
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      按钮权限控制
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry typo" itemprop="articleBody">
+      
+        <p>按钮权限有两种，一种是 <font color=#FFFF00> 不同role角色可见的按钮 </font>，一种是根据<font color=#FFFF00>路由跳转按钮</font></p>
+<h3 id="路由跳转按钮的设计思路"><a href="#路由跳转按钮的设计思路" class="headerlink" title="路由跳转按钮的设计思路"></a>路由跳转按钮的设计思路</h3><p><font size=3>1.首先平铺后端接口menu，获取到路由keys数组<br>2.判断keys是否包含该路由，并将IsShow状态存储在redux中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(&#123;</span><br><span class="line">   type: &#x27;set-buttonIsShow&#x27;,</span><br><span class="line">   payload: &#123; buttonIsShow: keys.includes(&#x27;material/templateAudit&#x27;) &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>3.最后通过IsShow去控制路由按钮的显示和隐藏</font></p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><font size=3>缺点：后续每添加一个权限按钮都要手动添加一个action，不优雅</font></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h3 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h3><p>前端做权限无非就两种：<br>1.用户能看到该页面，但会提示没权限<br>2.没权限的用户看不到该页面</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2022/05/15/%E6%8C%89%E9%92%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/" class="article-date">
+  <time class="dt-published" datetime="2022-05-15T11:11:39.000Z" itemprop="datePublished">2022-05-15</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%9A%E5%8A%A1%E9%9C%80%E6%B1%82/" rel="tag">业务需求</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2022/05/15/vite%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">下一页</strong>
+      <div class="article-nav-title">vite为什么快？</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      
+        <ul class="footer-links">
+          
+            <li><a href="/archives/"><span class="fa fa-book"></span></a></li>
+          
+            <li><a target="_blank" rel="noopener" href="https://twitter.com/wenqingxiaolia1"><span class="fa fa-twitter"></span></a></li>
+          
+            <li><a target="_blank" rel="noopener" href="https://github.com/ysh199882"><span class="fa fa-github"></span></a></li>
+          
+        </ul>
+	    
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        
+
+      </div>
+    </footer>
+
+      
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+
+
+
+
+
+<script src="/js/typing.js"></script>
+
+<!--[if lt IE 9]>
+<script src="https://cdn.jsdelivr.net/npm/html5shiv@3/dist/html5shiv.min.js"></script>
+<![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>
