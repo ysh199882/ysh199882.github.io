@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  
+  <title>vite为什么快？ | yongbi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一. Vite为什么快（No-bundle）？ no-bundle 预构建  二.vite里如何做代码格式规范（Lint工具链）？三.静态资源相关配置？静态资源包括img,svg,json,web Assembly等，我们首先需要考虑的是如何解析静态资源并加载为一个ES模块。然后在生产环境中如何优化静态资源的部署、体积大小、网络性能。 首先是普通图片路径问题 1234567891011&#x2F;&#x2F; vit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vite为什么快？">
+<meta property="og:url" content="https://www.yongbi.co/2022/05/15/vite%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="yongbi">
+<meta property="og:description" content="一. Vite为什么快（No-bundle）？ no-bundle 预构建  二.vite里如何做代码格式规范（Lint工具链）？三.静态资源相关配置？静态资源包括img,svg,json,web Assembly等，我们首先需要考虑的是如何解析静态资源并加载为一个ES模块。然后在生产环境中如何优化静态资源的部署、体积大小、网络性能。 首先是普通图片路径问题 1234567891011&#x2F;&#x2F; vit">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-15T10:28:22.000Z">
+<meta property="article:modified_time" content="2022-05-15T10:51:53.350Z">
+<meta property="article:author" content="yongbi">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/typing.css">
+
+  
+<link rel="stylesheet" href="/css/donate.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1/css/fork-awesome.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="about-vite学习笔记" class="h-entry article article-type-about" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <header id="header" class="header">
+  <nav class="mobile-nav">
+    <h1 class="nickname">Yongbi</h1>
+    <ul class="mobile-nav-menu">
+      <label for="mobile-menu-toggle"><a id="menu-button">&#9776; Menu</a></label>
+      <input type="checkbox" id="mobile-menu-toggle"/>
+      <ul class="mobile-nav-link">
+        
+        <a href="/">主页</a>
+        
+        <a href="/archives">Archives</a>
+        
+        <a href="/about">关于</a>
+        
+      </ul>
+    </ul>
+  </nav>
+	
+		<nav id="main-nav" class="main-nav nav-left">
+	
+	
+	  <a class="main-nav-link" href="/">主页</a>
+	
+	  <a class="main-nav-link" href="/archives">Archives</a>
+	
+	  <a class="main-nav-link" href="/about">关于</a>
+	
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      vite为什么快？
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry typo" itemprop="articleBody">
+      
+        <h5 id="一-Vite为什么快（No-bundle）？"><a href="#一-Vite为什么快（No-bundle）？" class="headerlink" title="一. Vite为什么快（No-bundle）？"></a>一. Vite为什么快（No-bundle）？</h5><ol>
+<li>no-bundle</li>
+<li>预构建</li>
+</ol>
+<h5 id="二-vite里如何做代码格式规范（Lint工具链）？"><a href="#二-vite里如何做代码格式规范（Lint工具链）？" class="headerlink" title="二.vite里如何做代码格式规范（Lint工具链）？"></a>二.vite里如何做代码格式规范（Lint工具链）？</h5><h5 id="三-静态资源相关配置？"><a href="#三-静态资源相关配置？" class="headerlink" title="三.静态资源相关配置？"></a>三.静态资源相关配置？</h5><p>静态资源包括img,svg,json,web Assembly等，我们首先需要考虑的是如何解析静态资源并加载为一个ES模块。然后在生产环境中如何优化静态资源的部署、体积大小、网络性能。</p>
+<p>首先是普通图片路径问题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// vite.config.ts</span><br><span class="line">import path from &#x27;path&#x27;;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    // 别名配置</span><br><span class="line">    alias: &#123;</span><br><span class="line">      &#x27;@assets&#x27;: path.join(__dirname, &#x27;src/assets&#x27;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.SVG组件化引入</p>
+<p>&#x2F;&#x2F;安装对应依赖</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm i vite-plugin-svgr -D</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;然后在配置文件里添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// vite.config.ts</span><br><span class="line">import svgr from &#x27;vite-plugin-svgr&#x27;;</span><br><span class="line">&#123;</span><br><span class="line">  plugins: [</span><br><span class="line">    svgr()</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;随后要在tsconfig.json配置，否则会有类型错误</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;compilerOptions&quot;: &#123;</span><br><span class="line">    &quot;types&quot;: [&quot;vite-plugin-svgr/client&quot;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;然后在业务组件中正常引入就可以了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123; ReactComponent as ReactLogo &#125; from &#x27;@assets/icons/logo.svg&#x27;;</span><br></pre></td></tr></table></figure>
+
+<h5 id="四-代码分割？"><a href="#四-代码分割？" class="headerlink" title="四.代码分割？"></a>四.代码分割？</h5><h5 id="五-tree-shaking"><a href="#五-tree-shaking" class="headerlink" title="五.tree-shaking"></a>五.tree-shaking</h5><h5 id="六-如何处理浏览器兼容问题？"><a href="#六-如何处理浏览器兼容问题？" class="headerlink" title="六.如何处理浏览器兼容问题？"></a>六.如何处理浏览器兼容问题？</h5><h5 id="七-如何写一个自己的Vite插件并发布到npm？"><a href="#七-如何写一个自己的Vite插件并发布到npm？" class="headerlink" title="七.如何写一个自己的Vite插件并发布到npm？"></a>七.如何写一个自己的Vite插件并发布到npm？</h5>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2022/05/15/vite%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time class="dt-published" datetime="2022-05-15T10:28:22.000Z" itemprop="datePublished">2022-05-15</time>
+</a>
+
+        </li>
+        
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2022/05/15/post/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">post</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      
+        <ul class="footer-links">
+          
+            <li><a href="/archives/"><span class="fa fa-book"></span></a></li>
+          
+            <li><a target="_blank" rel="noopener" href="https://twitter.com/wenqingxiaolia1"><span class="fa fa-twitter"></span></a></li>
+          
+            <li><a target="_blank" rel="noopener" href="https://github.com/ysh199882"><span class="fa fa-github"></span></a></li>
+          
+        </ul>
+	    
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        
+
+      </div>
+    </footer>
+
+      
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+
+
+
+
+
+<script src="/js/typing.js"></script>
+
+<!--[if lt IE 9]>
+<script src="https://cdn.jsdelivr.net/npm/html5shiv@3/dist/html5shiv.min.js"></script>
+<![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>
