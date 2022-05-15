@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  
+  <title>国际化适配时区问题 | yongbi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.moment时区问题1moment(date).utc().format(&amp;#x27;YYYY-MM-DD&amp;#x27;) 后端传的是 2022-03-31T22:58:06.238Z   UTC   格式的日期，东半球时区会多8小时，需要用到utc()去格式化。 2. 导出(下载)文件12345678910111213await downLoad(buttonType, params).the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="国际化适配时区问题">
+<meta property="og:url" content="https://www.yongbi.co/2022/03/15/%E5%9B%BD%E9%99%85%E5%8C%96%E9%80%82%E9%85%8D%E6%97%B6%E5%8C%BA%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="yongbi">
+<meta property="og:description" content="1.moment时区问题1moment(date).utc().format(&amp;#x27;YYYY-MM-DD&amp;#x27;) 后端传的是 2022-03-31T22:58:06.238Z   UTC   格式的日期，东半球时区会多8小时，需要用到utc()去格式化。 2. 导出(下载)文件12345678910111213await downLoad(buttonType, params).the">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-15T10:54:57.000Z">
+<meta property="article:modified_time" content="2022-05-15T11:00:16.510Z">
+<meta property="article:author" content="yongbi">
+<meta property="article:tag" content="国际化常见问题">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/typing.css">
+
+  
+<link rel="stylesheet" href="/css/donate.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1/css/fork-awesome.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="about-国际化适配时区问题" class="h-entry article article-type-about" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <header id="header" class="header">
+  <nav class="mobile-nav">
+    <h1 class="nickname">Yongbi</h1>
+    <ul class="mobile-nav-menu">
+      <label for="mobile-menu-toggle"><a id="menu-button">&#9776; Menu</a></label>
+      <input type="checkbox" id="mobile-menu-toggle"/>
+      <ul class="mobile-nav-link">
+        
+        <a href="/">主页</a>
+        
+        <a href="/archives">Archives</a>
+        
+        <a href="/about">关于</a>
+        
+      </ul>
+    </ul>
+  </nav>
+	
+		<nav id="main-nav" class="main-nav nav-left">
+	
+	
+	  <a class="main-nav-link" href="/">主页</a>
+	
+	  <a class="main-nav-link" href="/archives">Archives</a>
+	
+	  <a class="main-nav-link" href="/about">关于</a>
+	
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      国际化适配时区问题
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry typo" itemprop="articleBody">
+      
+        <h3 id="1-moment时区问题"><a href="#1-moment时区问题" class="headerlink" title="1.moment时区问题"></a>1.moment时区问题</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">moment(date).utc().format(&#x27;YYYY-MM-DD&#x27;)</span><br></pre></td></tr></table></figure>
+<p><font size=4 >后端传的是 2022-03-31T22:58:06.238Z   UTC   格式的日期，东半球时区会多8小时，需要用到utc()去格式化。</font></p>
+<h3 id="2-导出-下载-文件"><a href="#2-导出-下载-文件" class="headerlink" title="2. 导出(下载)文件"></a>2. 导出(下载)文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">await downLoad(buttonType, params).then((res) =&gt; &#123;</span><br><span class="line">  setLoadingBtn(false);</span><br><span class="line">  const newBlob = new Blob([res]);</span><br><span class="line">  const objUrl = window.URL.createObjectURL(newBlob);</span><br><span class="line">  const a = document.createElement(&#x27;a&#x27;);</span><br><span class="line">  a.href = objUrl;</span><br><span class="line">  const nowDate = moment().format(&#x27;YYYYMMDD&#x27;);</span><br><span class="line">  a.download = `创作者数据-$&#123;buttonType === &#x27;home&#x27; ? &#x27;店铺维度&#x27; : &#x27;应用维度&#x27;&#125;$&#123;nowDate&#125;.xlsx`;</span><br><span class="line">  a.click();</span><br><span class="line">  window.URL.revokeObjectURL(objUrl);</span><br><span class="line">&#125;).catch(() =&gt; &#123;</span><br><span class="line">  Message.error(&#x27;导出失败&#x27;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>1.将后端返回的文件流转换成blob流，</p>
+</blockquote>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const newBlob = new Blob([res]);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>2.然后创建一个DOMSting用来保存文件，</p>
+</blockquote>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.URL.createObjectURL(newBlob)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>3.创建一个a标签，通过对其自动点击事件执行下载<br>4.销毁DOMString(避免内存泄漏)</p>
+</blockquote>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.URL.revokeObjectURL(objUrl);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-useHistory跳转传参"><a href="#3-useHistory跳转传参" class="headerlink" title="3.useHistory跳转传参"></a>3.useHistory跳转传参</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HISTORY.push(&#123;</span><br><span class="line">              pathname: &#x27;/material/template/list&#x27;,</span><br><span class="line">              search: `?userNo=$&#123;userInfo.userInfo.userNo&#125;`</span><br><span class="line">            &#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-window-history和useHisstory（react-router）异同"><a href="#4-window-history和useHisstory（react-router）异同" class="headerlink" title="4.window.history和useHisstory（react-router）异同"></a>4.window.history和useHisstory（react-router）异同</h3>
+      
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2022/03/15/%E5%9B%BD%E9%99%85%E5%8C%96%E9%80%82%E9%85%8D%E6%97%B6%E5%8C%BA%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2022-03-15T10:54:57.000Z" itemprop="datePublished">2022-03-15</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9B%BD%E9%99%85%E5%8C%96%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" rel="tag">国际化常见问题</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <a href="/2022/04/17/hello-world/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+    <span id="article-nav-older" class="article-nav-link-wrap older"></span>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      
+        <ul class="footer-links">
+          
+            <li><a href="/archives/"><span class="fa fa-book"></span></a></li>
+          
+            <li><a target="_blank" rel="noopener" href="https://twitter.com/wenqingxiaolia1"><span class="fa fa-twitter"></span></a></li>
+          
+            <li><a target="_blank" rel="noopener" href="https://github.com/ysh199882"><span class="fa fa-github"></span></a></li>
+          
+        </ul>
+	    
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        
+
+      </div>
+    </footer>
+
+      
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+
+
+
+
+
+<script src="/js/typing.js"></script>
+
+<!--[if lt IE 9]>
+<script src="https://cdn.jsdelivr.net/npm/html5shiv@3/dist/html5shiv.min.js"></script>
+<![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>
